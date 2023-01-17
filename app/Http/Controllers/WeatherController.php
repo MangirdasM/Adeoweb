@@ -10,14 +10,14 @@ use stdClass;
 
 class WeatherController extends Controller
 {
-    public function  __invoke($city)
+    static function  getForecast($city)
     {
         return Cache::remember('city' . $city, 0, function() use ($city) {
             $response = Http::get('https://api.meteo.lt/v1/places/'.$city.'/forecasts/long-term');
 
             if ($response->successful()) {
-                
-                return json_decode($response->getBody());
+
+                return $response;
             }
 
             return response()->json([]);
