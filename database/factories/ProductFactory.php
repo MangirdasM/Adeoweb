@@ -25,7 +25,8 @@ class ProductFactory extends Factory
         return [
             'name' => $material_name .' '. $product_name,
             'sku' => $faker->numerify($material_name[0].$product_name[0].'-##'),
-            'price' => $faker->randomFloat(2,1,50)
+            'price' => $faker->randomFloat(2,1,50),
+            'category' => $product_name
         ];
     }
 }

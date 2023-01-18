@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Recommendation;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,7 +15,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\Product::factory(10)->create();
+        \App\Models\Product::factory(30)->create();
+        $this->call(RecommendationSeeder::class);
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
