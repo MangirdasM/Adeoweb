@@ -15,11 +15,19 @@ git clone https://github.com/MangirdasM/Adeoweb.git
 # Install dependancies
 composer install
 
+# Create .env file with you database information
+
 # Migrate database
 php artisan migrate:fresh
 
 # Seed databases
 php artisan db:seed
+
+# Generate key
+php artisan key:generate
+
+# Create localhost
+php artisan serve
 ```
 
 ## Usage
