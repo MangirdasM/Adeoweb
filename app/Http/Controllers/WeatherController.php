@@ -13,9 +13,16 @@ use App\Http\Resources\ProductResource;
 
 class WeatherController extends Controller
 {
+        
+    /**
+     * Get forecast for city from Meteo API
+     *
+     * @param  city - city code
+     * @return mixed -json response
+     */
     static function  getForecast($city)
     {
-        return Cache::remember('city' . $city, 0, function () use ($city) {
+        return Cache::remember('city' . $city, 60*5, function () use ($city) {
             $response = Http::get('https://api.meteo.lt/v1/places/' . $city . '/forecasts/long-term');
 
             if ($response->successful()) {
