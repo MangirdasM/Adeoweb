@@ -3,9 +3,9 @@ Service which returns product recommendations depending on current weather.
 
 ## Technologies
 
-PHP 8.1.5
-MySQL
-Laravel 9
+- PHP 8.1.5
+- MySQL
+- Laravel 9
 
 ## Setup
 ```
