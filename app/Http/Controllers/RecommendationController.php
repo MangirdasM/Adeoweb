@@ -15,26 +15,12 @@ class RecommendationController extends Controller
 {
     public function getRecommendation($conditionCode)
     {
+        $suitable =  RecommendationsResource::collection(Recommendation::where('weather', $conditionCode)->get());
 
-        $all =  RecommendationsResource::collection(Recommendation::all());
-        $items = ProductResource::collection(Product::all());
-        $avaible = [];
-
-        foreach ($all as $key => $value) {
-            if ($value['weather'] === $conditionCode) {
-                $avaible = $value['suitable_clothes'];
-            }
-        }
-        //dd($items);
-        foreach ($items as $key => $value) {
-
-            if (in_array($value['category'], $avaible)) {
-                return ProductResource::collection(Product::all())->whereIn('category', $avaible)->random(2);
-            }
-        }
+        return ProductResource::collection(Product::all())->whereIn('category', $suitable[0]['suitable_clothes'])->random(2);
     }
 
-    public function  __invoke($city)
+    public function  index($city)
     {
         $response =  WeatherController::getForecast($city);
 
@@ -43,8 +29,9 @@ class RecommendationController extends Controller
         $arr = [];
         $days = 0;
         $myobj = new stdClass;
-        $myTime = Carbon::now()->format('Y-m-d H:00:00');
+        $myTime = Carbon::now()->addHours(2)->format('Y-m-d H:00:00');
         $myobj->city = $city;
+
         foreach ($response['forecastTimestamps'] as $key) {
             if ($myTime === $key['forecastTimeUtc']) {
                 $days += 1;
@@ -64,6 +51,7 @@ class RecommendationController extends Controller
             };
         }
         $myobj->recommendations = $arr;
+
         return $myobj;
     }
 }
