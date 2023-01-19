@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use stdClass;
+use Exception;
 use Carbon\Carbon;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -20,12 +21,8 @@ class RecommendationController extends Controller
         return ProductResource::collection(Product::all())->whereIn('category', $suitable[0]['suitable_clothes'])->random(2);
     }
 
-    public function  index($city)
+    public function formatResponse($response, $city)
     {
-        $response =  WeatherController::getForecast($city);
-
-        json_decode($response->getBody());
-
         $arr = [];
         $days = 0;
         $myobj = new stdClass;
@@ -51,7 +48,19 @@ class RecommendationController extends Controller
             };
         }
         $myobj->recommendations = $arr;
+        $myobj->source = 'Weather information source: LHMT';
 
         return $myobj;
+    }
+
+    public function  index($city)
+    {
+        $response =  WeatherController::getForecast($city);
+
+        json_decode($response->getBody());
+
+        $data = RecommendationController::formatResponse($response, $city);
+
+        return response()->json($data, $statuscode = 200);  
     }
 }
