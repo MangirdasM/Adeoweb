@@ -25,12 +25,7 @@ class FormatService
         // Loop for finding the recommendations for 3 days
         foreach ($response['forecastTimestamps'] as $key) {
             if ($current_time === $key['forecastTimeUtc']) {
-                if ($days === 3) {
-                    $output->recommendations = $recommendations;
-                    $output->source = 'Weather information source: LHMT';
-
-                    return $output;
-                }
+                   
                 $days += 1;
 
                 $recommendations_for_date = [
@@ -39,11 +34,16 @@ class FormatService
                     // Get recommended products
                     'products' => RecommendationService::getRecommendation($key['conditionCode'])
                 ];
-
-                array_push($recommendations, $recommendations_for_date);
-
-                $current_time = Carbon::now()->addDays($days)->format('Y-m-d H:00:00');
                 
+                array_push($recommendations, $recommendations_for_date);
+                $current_time = Carbon::now()->addDays($days)->format('Y-m-d H:00:00');
+
+                if ($days === 3) {
+                    $output->recommendations = $recommendations;
+                    $output->source = 'Weather information source: LHMT';
+
+                    return $output;
+                }
             };
         }
         

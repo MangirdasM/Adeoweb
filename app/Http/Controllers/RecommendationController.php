@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Recommendation;
 use App\Services\FormatService;
 use App\Services\WeatherService;
 use Spatie\FlareClient\Http\Response;
@@ -14,6 +15,7 @@ class RecommendationController extends Controller
         $response =  WeatherService::getForecast($city);
 
         json_decode($response->getBody());
+        
         // Get formated response
         $data = FormatService::formatResponse($response, $city);
 
